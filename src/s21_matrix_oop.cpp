@@ -193,14 +193,13 @@ S21Matrix S21Matrix::CalcComplements() {
   if (rows_ != cols_)
     throw MyCustomException(
         "Exception. Determinant() - columns must be equal to rows.");
-  S21Matrix result(rows_, cols_);
+  S21Matrix result(*this);
   for (int i = 0; i < rows_; ++i)
-    for (int j = 0; j < cols_; ++j){
+    for (int j = 0; j < cols_; ++j) {
       if ((i + j) % 2 == 1)
         result.matrix_[i][j] = this->GetMinor(i, j) * -1;
       else
         result.matrix_[i][j] = this->GetMinor(i, j);
-      // std::cout << "\n\n" << result.matrix_[i][j] << "\n\n";
     }
   return result;
 }
@@ -208,19 +207,17 @@ S21Matrix S21Matrix::CalcComplements() {
 double S21Matrix::GetMinor(int row, int column) {
   S21Matrix small(rows_ - 1, cols_ - 1);
   int small_i = 0, small_j = 0;
-  for (int i = 0; i < rows_; ++i)
-    for (int j = 0; j < cols_; ++j){
+  for (int i = 0; i < rows_; ++i) {
+    for (int j = 0; j < cols_; ++j)
       if (i != row && j != column) {
         small.matrix_[small_i][small_j] = matrix_[i][j];
-        std::cout << "\n" << matrix_[i][j] << "\n";
         small_j++;
         if (small_j == rows_ - 1) {
           small_j = 0;
           small_i++;
         }
       }
-      std::cout << "\n\n\n";
-    }
+  }
   return small.Determinant();
 }
 
@@ -260,9 +257,8 @@ S21Matrix S21Matrix::InverseMatrix() {
   S21Matrix complements_matrix = this->CalcComplements();
   S21Matrix transposed_complements_matrix = complements_matrix.Transpose();
   for (int i = 0; i < rows_; ++i)
-    for (int j = 0; j < cols_; ++j){
+    for (int j = 0; j < cols_; ++j)
       transposed_complements_matrix.matrix_[i][j] /= det;
-    }
 
   return transposed_complements_matrix;
 }

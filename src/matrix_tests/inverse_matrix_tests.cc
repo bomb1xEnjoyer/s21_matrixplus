@@ -174,20 +174,20 @@ TEST(TestInverse, TestInverse4) {
   EXPECT_EQ(matrix1.GetRows(), 4);
 
   matrix1(0, 0) = -7;
-  matrix1(1, 0) = -6;
-  matrix1(2, 0) = 10;
-  matrix1(3, 0) = 7;
-  matrix1(0, 1) = -9;
+  matrix1(0, 1) = -6;
+  matrix1(0, 2) = 10;
+  matrix1(0, 3) = 7;
+  matrix1(1, 0) = -9;
   matrix1(1, 1) = 3;
-  matrix1(2, 1) = 0;
-  matrix1(3, 1) = -3;
-  matrix1(0, 2) = 8;
-  matrix1(1, 2) = -4;
+  matrix1(1, 2) = 0;
+  matrix1(1, 3) = -3;
+  matrix1(2, 0) = 8;
+  matrix1(2, 1) = -4;
   matrix1(2, 2) = -6;
-  matrix1(3, 2) = -10;
-  matrix1(0, 3) = 0;
-  matrix1(1, 3) = 10;
-  matrix1(2, 3) = 4;
+  matrix1(2, 3) = -10;
+  matrix1(3, 0) = 0;
+  matrix1(3, 1) = 10;
+  matrix1(3, 2) = 4;
   matrix1(3, 3) = 8;
 
   inversed = matrix1.InverseMatrix();

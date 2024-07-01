@@ -131,21 +131,20 @@ TEST(TestCalcComplements, TestCalcComplements3) {
   matrix1(1, 2) = 7;
   matrix1(2, 2) = 3;
 
-  result_check(0, 0) = 49;
-  result_check(1, 0) = -37;
-  result_check(2, 0) = 21;
-
-  result_check(0, 1) = -32;
-  result_check(1, 1) = 23;
-  result_check(2, 1) = -11;
-
-  result_check(0, 2) = 88;
-  result_check(1, 2) = -68;
-  result_check(2, 2) = 35;
-
   S21Matrix matrix_before = matrix1;
   S21Matrix result = matrix1.CalcComplements();
 
-  EXPECT_TRUE(result == result_check);
+  EXPECT_NEAR(result(0, 0), 49, EPS_TEST);
+  EXPECT_NEAR(result(0, 1), -32, EPS_TEST);
+  EXPECT_NEAR(result(0, 2), 88, EPS_TEST);
+
+  EXPECT_NEAR(result(1, 0), -37, EPS_TEST);
+  EXPECT_NEAR(result(1, 1), 23, EPS_TEST);
+  EXPECT_NEAR(result(1, 2), -68, EPS_TEST);
+
+  EXPECT_NEAR(result(2, 0), 21, EPS_TEST);
+  EXPECT_NEAR(result(2, 1), -11, EPS_TEST);
+  EXPECT_NEAR(result(2, 2), 35, EPS_TEST);
+
   EXPECT_TRUE(matrix1 == matrix_before);
 }
