@@ -173,38 +173,96 @@ void S21Matrix::MulNumber(const double num) { (*this) *= num; }
 
 void S21Matrix::MulMatrix(const S21Matrix& other) { (*this) *= other; }
 
+double& S21Matrix::operator()(int i, int j) {
+  if (i < 0 || j < 0 || i >= rows_ || j >= cols_)
+    throw MyCustomException(
+        "Exception. operator()(int i, int j) - Index out of range.");
+  return matrix_[i][j];
+}
+
 S21Matrix S21Matrix::Transpose() {
   S21Matrix temp(cols_, rows_);
 
   for (int i = 0; i < cols_; ++i)
-    for (int j = 0; j < rows_; ++j) temp.matrix_[i][j] = matrix_[i][j];
+    for (int j = 0; j < rows_; ++j) temp.matrix_[i][j] = matrix_[j][i];
 
   return temp;
 }
 
-S21Matrix S21Matrix::CalcComplements() {}
+S21Matrix S21Matrix::CalcComplements() {
+  if (rows_ != cols_)
+    throw MyCustomException(
+        "Exception. Determinant() - columns must be equal to rows.");
+  S21Matrix result(rows_, cols_);
+  for (int i = 0; i < rows_; ++i)
+    for (int j = 0; j < cols_; ++j){
+      if ((i + j) % 2 == 1)
+        result.matrix_[i][j] = this->GetMinor(i, j) * -1;
+      else
+        result.matrix_[i][j] = this->GetMinor(i, j);
+      // std::cout << "\n\n" << result.matrix_[i][j] << "\n\n";
+    }
+  return result;
+}
+
+double S21Matrix::GetMinor(int row, int column) {
+  S21Matrix small(rows_ - 1, cols_ - 1);
+  int small_i = 0, small_j = 0;
+  for (int i = 0; i < rows_; ++i)
+    for (int j = 0; j < cols_; ++j){
+      if (i != row && j != column) {
+        small.matrix_[small_i][small_j] = matrix_[i][j];
+        std::cout << "\n" << matrix_[i][j] << "\n";
+        small_j++;
+        if (small_j == rows_ - 1) {
+          small_j = 0;
+          small_i++;
+        }
+      }
+      std::cout << "\n\n\n";
+    }
+  return small.Determinant();
+}
 
 double S21Matrix::Determinant() {
-  double det = 0;
+  double det = 1;
 
   if (rows_ != cols_)
     throw MyCustomException(
         "Exception. Determinant() - columns must be equal to rows.");
 
-  S21Matrix copy(*this);
-
-  for (int i = 0; i < rows_; ++i) det *= copy.matrix_[i][i];
+  S21Matrix* copy = new S21Matrix(*this);
+  TransformationToTriangleMatrix(copy);
+  for (int i = 0; i < rows_; ++i) det *= copy->matrix_[i][i];
+  delete copy;
 
   return det;
 }
 
-void S21Matrix::TransformationToTriangleMatrix(S21Matrix& copy) {
-  for (int i = 0; i < copy.rows_; ++i)
-    for (int k = i + 1; k < copy.rows_; ++k) {
-      double coefficient = copy.matrix_[k][i] / copy.matrix_[i][i];
-      for (int j = 0; j < copy.rows_; ++j)
-        copy.matrix_[k][j] -= coefficient * copy.matrix_[i][j];
+void S21Matrix::TransformationToTriangleMatrix(S21Matrix* copy) {
+  for (int i = 0; i < copy->rows_ - 1; ++i)
+    for (int k = i + 1; k < copy->rows_; ++k) {
+      double coefficient = copy->matrix_[k][i] / copy->matrix_[i][i];
+      for (int j = 0; j < copy->rows_; ++j) {
+        copy->matrix_[k][j] -= coefficient * copy->matrix_[i][j];
+        if (std::isnan(copy->matrix_[k][j])) copy->matrix_[k][j] = 0;
+      }
     }
 }
 
-S21Matrix S21Matrix::InverseMatrix() {}
+S21Matrix S21Matrix::InverseMatrix() {
+  double det = this->Determinant();
+  if (fabs(det) < 1e-7)
+    throw MyCustomException(
+        "Exception. InverseMatrix() - determinant = 0 => inverse matrix "
+        "doesn't exist.");
+
+  S21Matrix complements_matrix = this->CalcComplements();
+  S21Matrix transposed_complements_matrix = complements_matrix.Transpose();
+  for (int i = 0; i < rows_; ++i)
+    for (int j = 0; j < cols_; ++j){
+      transposed_complements_matrix.matrix_[i][j] /= det;
+    }
+
+  return transposed_complements_matrix;
+}

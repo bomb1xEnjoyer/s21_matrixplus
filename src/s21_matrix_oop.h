@@ -6,13 +6,12 @@
 #include <string>
 
 class MyCustomException : public std::exception {
-  private:
-    std::string message_;
-  public:
-    MyCustomException(const std::string& message) : message_(message) {}
-    const char* what() const noexcept override {
-      return message_.c_str();
-    }
+ private:
+  std::string message_;
+
+ public:
+  MyCustomException(const std::string& message) : message_(message) {}
+  const char* what() const noexcept override { return message_.c_str(); }
 };
 
 class S21Matrix {
@@ -26,8 +25,8 @@ class S21Matrix {
  public:
   S21Matrix();
   S21Matrix(int rows, int cols);
-  S21Matrix(const S21Matrix& other); // copy constructor
-  S21Matrix(S21Matrix&& other); // move constructor
+  S21Matrix(const S21Matrix& other);  // copy constructor
+  S21Matrix(S21Matrix&& other);       // move constructor
   ~S21Matrix();
 
   int GetRows();
@@ -55,8 +54,10 @@ class S21Matrix {
   S21Matrix& operator-=(const S21Matrix& other);
   S21Matrix& operator*=(const S21Matrix& other);
   S21Matrix& operator*=(double number);
+  double& operator()(int i, int j);
 
-  void TransformationToTriangleMatrix(S21Matrix& copy);
+  void TransformationToTriangleMatrix(S21Matrix* copy);
+  double GetMinor(int row, int column);
 };
 
 #endif
