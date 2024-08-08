@@ -6,7 +6,7 @@ Implementation the matrix library using the object-oriented approach.
 - make Utility
 
 ## Commands:
-- Run `make` - to library project and run tests
+- Run `make` - to build library and run tests
 
 ## About project
 ### Matrix class in C++
