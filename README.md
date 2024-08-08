@@ -5,4 +5,4 @@ Implementation the matrix library using the object-oriented approach.
 - GCC compiler
 - make Utility
 ## Commands:
-- Run `make` - to build project and run tests
+- Run `make` - to library project and run tests
