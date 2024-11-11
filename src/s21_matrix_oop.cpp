@@ -1,14 +1,16 @@
 #include "s21_matrix_oop.h"
 
-double** S21Matrix::CreateMatrix() {
-  matrix_ = new double*[rows_];
-  for (int i = 0; i < rows_; ++i) matrix_[i] = new double[cols_]{0.0};
+double **S21Matrix::CreateMatrix() {
+  matrix_ = new double *[rows_];
+  for (int i = 0; i < rows_; ++i)
+    matrix_[i] = new double[cols_]{0.0};
   return matrix_;
 }
 
 void S21Matrix::DeleteMatrix() {
   if (matrix_ != nullptr) {
-    for (int i = 0; i < rows_; ++i) delete[] matrix_[i];
+    for (int i = 0; i < rows_; ++i)
+      delete[] matrix_[i];
     delete[] matrix_;
     matrix_ = nullptr;
   }
@@ -24,12 +26,13 @@ void S21Matrix::SetRows(int rows) {
     S21Matrix temp(rows, cols_);
 
     for (int i = 0; i < min_rows; ++i)
-      for (int j = 0; j < cols_; ++j) temp.matrix_[i][j] = matrix_[i][j];
+      for (int j = 0; j < cols_; ++j)
+        temp.matrix_[i][j] = matrix_[i][j];
 
     DeleteMatrix();
     *this = temp;
   } else
-    throw MyCustomException(
+    throw std::invalid_argument(
         "Exception. SetRows(int rows) - rows value must be > 0.");
 }
 
@@ -39,12 +42,13 @@ void S21Matrix::SetCols(int cols) {
     S21Matrix temp(rows_, cols);
 
     for (int i = 0; i < rows_; ++i)
-      for (int j = 0; j < min_cols; ++j) temp.matrix_[i][j] = matrix_[i][j];
+      for (int j = 0; j < min_cols; ++j)
+        temp.matrix_[i][j] = matrix_[i][j];
 
     DeleteMatrix();
     *this = temp;
   } else
-    throw MyCustomException(
+    throw std::invalid_argument(
         "Exception. SetCols(int cols) - cols value must be > 0.");
 }
 
@@ -56,19 +60,20 @@ S21Matrix::S21Matrix(int rows, int cols) {
     cols_ = cols;
     CreateMatrix();
   } else
-    throw MyCustomException(
+    throw std::invalid_argument(
         "Exception. S21Matrix(int rows, int cols) - rows and cols values must "
         "be > 0.");
 }
 
-S21Matrix::S21Matrix(const S21Matrix& other)
+S21Matrix::S21Matrix(const S21Matrix &other)
     : rows_(other.rows_), cols_(other.cols_) {
   CreateMatrix();
   for (int i = 0; i < rows_; ++i)
-    for (int j = 0; j < cols_; ++j) matrix_[i][j] = other.matrix_[i][j];
+    for (int j = 0; j < cols_; ++j)
+      matrix_[i][j] = other.matrix_[i][j];
 }
 
-S21Matrix::S21Matrix(S21Matrix&& other)
+S21Matrix::S21Matrix(S21Matrix &&other)
     : rows_(other.rows_), cols_(other.cols_) {
   this->matrix_ = other.matrix_;
   other.rows_ = 0;
@@ -82,9 +87,9 @@ S21Matrix::~S21Matrix() {
   cols_ = 0;
 }
 
-S21Matrix S21Matrix::operator+(const S21Matrix& other) {
+S21Matrix S21Matrix::operator+(const S21Matrix &other) {
   if (rows_ != other.rows_ || cols_ != other.cols_)
-    throw MyCustomException(
+    throw std::invalid_argument(
         "Exception. operator+(const S21Matrix& other) - sizes must be equal.");
   S21Matrix answer(rows_, cols_);
   for (int i = 0; i < rows_; ++i)
@@ -93,9 +98,9 @@ S21Matrix S21Matrix::operator+(const S21Matrix& other) {
   return answer;
 }
 
-S21Matrix S21Matrix::operator-(const S21Matrix& other) {
+S21Matrix S21Matrix::operator-(const S21Matrix &other) {
   if (rows_ != other.rows_ || cols_ != other.cols_)
-    throw MyCustomException(
+    throw std::invalid_argument(
         "Exception. operator-(const S21Matrix& other) - sizes must be equal.");
   S21Matrix answer(rows_, cols_);
   for (int i = 0; i < rows_; ++i)
@@ -104,9 +109,9 @@ S21Matrix S21Matrix::operator-(const S21Matrix& other) {
   return answer;
 }
 
-S21Matrix S21Matrix::operator*(const S21Matrix& other) {
+S21Matrix S21Matrix::operator*(const S21Matrix &other) {
   if (cols_ != other.rows_)
-    throw MyCustomException(
+    throw std::invalid_argument(
         "Exception. operator*(const S21Matrix& other) - sizes are not valid "
         "for multiplication.");
   S21Matrix answer(rows_, other.cols_);
@@ -125,57 +130,60 @@ S21Matrix S21Matrix::operator*(double number) {
   return answer;
 }
 
-bool S21Matrix::operator==(const S21Matrix& other) {
-  if (rows_ != other.rows_ || cols_ != other.cols_) return false;
+bool S21Matrix::operator==(const S21Matrix &other) {
+  if (rows_ != other.rows_ || cols_ != other.cols_)
+    return false;
   for (int i = 0; i < rows_; ++i)
     for (int j = 0; j < cols_; ++j)
-      if (fabs(matrix_[i][j] != other.matrix_[i][j]) >= 1e-7) return false;
+      if (fabs(matrix_[i][j] != other.matrix_[i][j]) >= 1e-7)
+        return false;
   return true;
 }
 
-S21Matrix& S21Matrix::operator=(const S21Matrix& other) {
+S21Matrix &S21Matrix::operator=(const S21Matrix &other) {
   DeleteMatrix();
   rows_ = other.rows_;
   cols_ = other.cols_;
   CreateMatrix();
   for (int i = 0; i < rows_; ++i)
-    for (int j = 0; j < cols_; ++j) matrix_[i][j] = other.matrix_[i][j];
+    for (int j = 0; j < cols_; ++j)
+      matrix_[i][j] = other.matrix_[i][j];
   return *this;
 }
 
-S21Matrix& S21Matrix::operator+=(const S21Matrix& other) {
+S21Matrix &S21Matrix::operator+=(const S21Matrix &other) {
   *this = *this + other;
   return *this;
 }
 
-S21Matrix& S21Matrix::operator-=(const S21Matrix& other) {
+S21Matrix &S21Matrix::operator-=(const S21Matrix &other) {
   *this = *this - other;
   return *this;
 }
 
-S21Matrix& S21Matrix::operator*=(const S21Matrix& other) {
+S21Matrix &S21Matrix::operator*=(const S21Matrix &other) {
   *this = *this * other;
   return *this;
 }
 
-S21Matrix& S21Matrix::operator*=(double number) {
+S21Matrix &S21Matrix::operator*=(double number) {
   *this = *this * number;
   return *this;
 }
 
-bool S21Matrix::EqMatrix(const S21Matrix& other) { return (*this) == other; }
+bool S21Matrix::EqMatrix(const S21Matrix &other) { return (*this) == other; }
 
-void S21Matrix::SumMatrix(const S21Matrix& other) { (*this) += other; }
+void S21Matrix::SumMatrix(const S21Matrix &other) { (*this) += other; }
 
-void S21Matrix::SubMatrix(const S21Matrix& other) { (*this) -= other; }
+void S21Matrix::SubMatrix(const S21Matrix &other) { (*this) -= other; }
 
 void S21Matrix::MulNumber(const double num) { (*this) *= num; }
 
-void S21Matrix::MulMatrix(const S21Matrix& other) { (*this) *= other; }
+void S21Matrix::MulMatrix(const S21Matrix &other) { (*this) *= other; }
 
-double& S21Matrix::operator()(int i, int j) {
+double &S21Matrix::operator()(int i, int j) {
   if (i < 0 || j < 0 || i >= rows_ || j >= cols_)
-    throw MyCustomException(
+    throw std::out_of_range(
         "Exception. operator()(int i, int j) - Index out of range.");
   return matrix_[i][j];
 }
@@ -184,14 +192,15 @@ S21Matrix S21Matrix::Transpose() {
   S21Matrix temp(cols_, rows_);
 
   for (int i = 0; i < cols_; ++i)
-    for (int j = 0; j < rows_; ++j) temp.matrix_[i][j] = matrix_[j][i];
+    for (int j = 0; j < rows_; ++j)
+      temp.matrix_[i][j] = matrix_[j][i];
 
   return temp;
 }
 
 S21Matrix S21Matrix::CalcComplements() {
   if (rows_ != cols_)
-    throw MyCustomException(
+    throw std::logic_error(
         "Exception. Determinant() - columns must be equal to rows.");
   S21Matrix result(*this);
   for (int i = 0; i < rows_; ++i)
@@ -225,24 +234,26 @@ double S21Matrix::Determinant() {
   double det = 1;
 
   if (rows_ != cols_)
-    throw MyCustomException(
+    throw std::logic_error(
         "Exception. Determinant() - columns must be equal to rows.");
 
-  S21Matrix* copy = new S21Matrix(*this);
+  S21Matrix *copy = new S21Matrix(*this);
   TransformationToTriangleMatrix(copy);
-  for (int i = 0; i < rows_; ++i) det *= copy->matrix_[i][i];
+  for (int i = 0; i < rows_; ++i)
+    det *= copy->matrix_[i][i];
   delete copy;
 
   return det;
 }
 
-void S21Matrix::TransformationToTriangleMatrix(S21Matrix* copy) {
+void S21Matrix::TransformationToTriangleMatrix(S21Matrix *copy) {
   for (int i = 0; i < copy->rows_ - 1; ++i)
     for (int k = i + 1; k < copy->rows_; ++k) {
       double coefficient = copy->matrix_[k][i] / copy->matrix_[i][i];
       for (int j = 0; j < copy->rows_; ++j) {
         copy->matrix_[k][j] -= coefficient * copy->matrix_[i][j];
-        if (std::isnan(copy->matrix_[k][j])) copy->matrix_[k][j] = 0;
+        if (std::isnan(copy->matrix_[k][j]))
+          copy->matrix_[k][j] = 0;
       }
     }
 }
@@ -250,7 +261,7 @@ void S21Matrix::TransformationToTriangleMatrix(S21Matrix* copy) {
 S21Matrix S21Matrix::InverseMatrix() {
   double det = this->Determinant();
   if (fabs(det) < 1e-7)
-    throw MyCustomException(
+    throw std::logic_error(
         "Exception. InverseMatrix() - determinant = 0 => inverse matrix "
         "doesn't exist.");
 
