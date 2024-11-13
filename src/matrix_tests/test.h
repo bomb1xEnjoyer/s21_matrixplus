@@ -1,5 +1,4 @@
-#ifndef CPP1_S21_MATRIXPLUS_MATRIX_TESTS_H_
-#define CPP1_S21_MATRIXPLUS_MATRIX_TESTS_H_
+#pragma once
 
 #include <gtest/gtest.h>
 
@@ -8,6 +7,4 @@
 #define EPS_TEST 1e-7
 
 void CheckMatrix(const S21Matrix matrix, double value);
-void FillMatrix(S21Matrix& matrix, double value);
-
-#endif
+void FillMatrix(S21Matrix &matrix, double value);

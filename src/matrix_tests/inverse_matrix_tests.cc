@@ -158,11 +158,11 @@ TEST(TestInverse, TestInverse3) {
   EXPECT_NEAR(inversed(0, 0), -18.0 / 570, EPS_TEST);
   EXPECT_NEAR(inversed(0, 1), -54.0 / 570, EPS_TEST);
   EXPECT_NEAR(inversed(0, 2), 12.0 / 570, EPS_TEST);
-  
+
   EXPECT_NEAR(inversed(1, 0), -76.0 / 570, EPS_TEST);
   EXPECT_NEAR(inversed(1, 1), -38.0 / 570, EPS_TEST);
   EXPECT_NEAR(inversed(1, 2), -76.0 / 570, EPS_TEST);
-  
+
   EXPECT_NEAR(inversed(2, 0), -30.0 / 570, EPS_TEST);
   EXPECT_NEAR(inversed(2, 1), -90.0 / 570, EPS_TEST);
   EXPECT_NEAR(inversed(2, 2), -75.0 / 570, EPS_TEST);
@@ -196,7 +196,7 @@ TEST(TestInverse, TestInverse4) {
   EXPECT_NEAR(inversed(0, 1), -3.0 / 56, EPS_TEST);
   EXPECT_NEAR(inversed(0, 2), 11.0 / 126, EPS_TEST);
   EXPECT_NEAR(inversed(0, 3), 67.0 / 1008, EPS_TEST);
-  
+
   EXPECT_NEAR(inversed(1, 0), -1.0 / 252, EPS_TEST);
   EXPECT_NEAR(inversed(1, 1), 5.0 / 84, EPS_TEST);
   EXPECT_NEAR(inversed(1, 2), 4.0 / 63, EPS_TEST);
